@@ -1,0 +1,28 @@
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Java / Maven
+target/
+*.class
+
+# Node
+node_modules/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Archives
+*.zip
+
+# Temporary files
+*.tmp
+*.swp

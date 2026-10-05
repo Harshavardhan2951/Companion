@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: emergency-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aegis_core_db
+    username: aegis_app
+    password: aegis_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  sql:
+    init:
+      mode: always
+      platform: postgresql
+
+server:
+  port: 8082
+  servlet:
+    context-path: /api/emergency
+
+logging:
+  level:
+    root: INFO
+    com.aicompanion: DEBUG

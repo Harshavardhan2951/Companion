@@ -1,0 +1,10 @@
+docker exec -it companion-postgres psql -U aegis_app -d aegis_core_db
+	- Used to Connect to the Postgres DB from the Docker. 
+docker exec -it companion-postgres psql -U aegis_app -d aegis_core_db -c "\dt"
+	- Used to list the tables created within the Database
+# 1. Stop and remove existing containers (data will be LOST - that's OK for dev)
+docker-compose down -v
+
+# 2. Restart fresh (init-db.sql will run automatically)
+docker-compose up -d
+
