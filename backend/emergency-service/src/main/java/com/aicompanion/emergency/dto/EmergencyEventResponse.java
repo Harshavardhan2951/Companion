@@ -5,18 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmergencyEventResponse {
 
-    private Long id;
-    private Integer userId;
-    private String eventType;
-    private String escalationStatus;
-    private OffsetDateTime createdAt;
-    private String additionalInfo;
+    private Long patientId;
+    private Boolean emergencyTriggered;
+    private String reason;
+    private Integer notifiedContactsCount;
+    private Long processingTimeMs;
 }
