@@ -32,6 +32,7 @@ public class EmergencyEvent {
     @Column(name = "event_type", nullable = false, length = 50)
     private String eventType;
 
+    @Builder.Default
     @Column(name = "escalation_status", nullable = false, length = 50)
     private String escalationStatus = "PENDING";
 

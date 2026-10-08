@@ -1,6 +1,7 @@
 package com.aicompanion.emergency.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class EmergencyContact {
 
     @Id
@@ -29,7 +31,7 @@ public class EmergencyContact {
     @Column(name = "caregiver_phone", nullable = false, length = 20)
     private String caregiverPhone;
 
-    @Column(name = "priority_order")
+    @Column(name = "priority_order", columnDefinition = "INTEGER DEFAULT 1")
     private Integer priorityOrder = 1;
 
     @CreationTimestamp

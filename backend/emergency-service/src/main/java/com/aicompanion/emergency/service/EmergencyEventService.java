@@ -5,11 +5,12 @@ import com.aicompanion.emergency.dto.EmergencyEventResponse;
 import com.aicompanion.emergency.entity.EmergencyEvent;
 import com.aicompanion.emergency.entity.User;
 import com.aicompanion.emergency.repository.EmergencyEventRepository;
-import com.aicompanion.emergency.repository.EmergencyUserRepository;
+import com.aicompanion.emergency.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.regex.Pattern;
 
 @Service
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
 public class EmergencyEventService {
 
     private final EmergencyEventRepository emergencyEventRepository;
-    private final EmergencyUserRepository emergencyUserRepository;
+    private final UserRepository userRepository;
 
     public static final Pattern EMERGENCY_CASE_MATTER = Pattern.compile(
             "\\b(help|fall|sos|emergency|fatigue|insomnia)\\b",
@@ -27,31 +28,38 @@ public class EmergencyEventService {
 
     public EmergencyEventResponse processEvent(EmergencyEventRequest request) {
         long startTime = System.currentTimeMillis();
-        boolean triggered = request.getIsExplicitSos() ||
+        boolean triggered = Boolean.TRUE.equals(request.getIsExplicitSos()) ||
                 (request.getPayload() != null &&
                         EMERGENCY_CASE_MATTER.matcher(request.getPayload()).find());
 
         String reason = triggered ? "Emergency Detected" : "No Trigger";
 
-        User user = emergencyUserRepository.findById(request.getPatientId().intValue())
+        User user = userRepository.findById(request.getUserId().intValue())
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
-        if(triggered) {
-            EmergencyEvent event = EmergencyEvent.builder()
+        EmergencyEvent event = null;
+
+        if (triggered) {
+            event = EmergencyEvent.builder()
                     .user(user)
                     .eventType(request.getTriggerType() != null ? request.getTriggerType() : "SOS")
                     .escalationStatus("ESCALATED")
                     .additionalInfo(request.getPayload())
                     .build();
-            emergencyEventRepository.save(event);
+            event = emergencyEventRepository.save(event);
             log.warn("EMERGENCY: User {} - {}", user.getId(), reason);
         }
+
         long latency = System.currentTimeMillis() - startTime;
+
         return EmergencyEventResponse.builder()
-                .patientId(request.getPatientId())
+                .eventId(event != null ? event.getId() : null)
+                .userId(user.getId())
+                .eventType(event != null ? event.getEventType() : request.getTriggerType())
+                .escalationStatus(triggered ? "ESCALATED" : "NONE")
+                .createdAt(event != null && event.getCreatedAt() != null ? event.getCreatedAt() : OffsetDateTime.now())
                 .emergencyTriggered(triggered)
                 .reason(reason)
-                .notifiedContactsCount(0)
                 .processingTimeMs(latency)
                 .build();
     }

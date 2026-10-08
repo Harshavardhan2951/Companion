@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class EmergencyEventRequest {
 
-    @NotNull(message = "Patient ID is required")
-    private Long patientId;
+    @NotNull(message = "User ID is required")
+    private Long userId;
 
     private String payload;
 
