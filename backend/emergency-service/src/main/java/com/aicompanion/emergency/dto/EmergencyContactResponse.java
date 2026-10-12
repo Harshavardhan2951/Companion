@@ -15,8 +15,8 @@ public class EmergencyContactResponse {
 
     private Integer id;
     private Integer patientId;
-    private String emergencyName;
-    private String emergencyPhone;
+    private String caregiverName;
+    private String caregiverPhone;
     private Integer priorityOrder;
     private OffsetDateTime createdAt;
 }

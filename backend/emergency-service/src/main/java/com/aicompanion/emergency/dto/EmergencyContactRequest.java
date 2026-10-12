@@ -19,7 +19,7 @@ public class EmergencyContactRequest {
     private String caregiverName;
 
     @NotBlank(message = "CareGiver_Phone is required")
-    private String caregiverNum;
+    private String caregiverPhone;
 
     private Integer priorityOrder = 1;
 }
