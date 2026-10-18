@@ -12,6 +12,10 @@ class TranscriptionResponse(BaseModel):
 def health():
     return {"status": "UP"}
 
+@app.get("/greet")
+def greet():
+   return {"status": "Hello Harsha"}
+
 @app.post("/transcribe")
 async def transcribe(file: UploadFile = File(...)):
     start = time.time()

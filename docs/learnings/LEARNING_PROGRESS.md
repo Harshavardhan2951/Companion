@@ -108,3 +108,17 @@
 - **Search:** OpenSearch 3.7
 - **Containerization:** Docker + Docker Compose
 - **VCS:** Git
+
+---
+
+## Week 4: Intent Parser ✓
+
+**Completed:**
+- `IntentParser` service: keyword classification (whole-word match, multi-word phrases supported)
+- `IntentResponse` DTO: intent, confidence, matchedKeyword, latencyMs
+- `IntentController`: POST /api/emergency/intent (text/plain body)
+
+**Verified:**
+- "I fell down" → EMERGENCY, matchedKeyword "fell"
+
+**Next:** Week 5 - OpenSearch vector memory (RAG)
