@@ -3,6 +3,7 @@ package com.aicompanion.emergency.controller;
 import com.aicompanion.emergency.dto.EmergencyEventRequest;
 import com.aicompanion.emergency.dto.EmergencyEventResponse;
 import com.aicompanion.emergency.service.EmergencyEventService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class EmergencyEventController {
 
     @PostMapping("/process")
     public ResponseEntity<EmergencyEventResponse> processEvent(
-            @RequestBody EmergencyEventRequest request
+            @Valid @RequestBody EmergencyEventRequest request
     ) {
         EmergencyEventResponse response = eventService.processEvent(request);
         return ResponseEntity.ok(response);

@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -20,21 +19,16 @@ public class EmergencyEventService {
 
     private final EmergencyEventRepository emergencyEventRepository;
     private final UserRepository userRepository;
-
-    public static final Pattern EMERGENCY_CASE_MATTER = Pattern.compile(
-            "\\b(help|fall|sos|emergency|fatigue|insomnia)\\b",
-            Pattern.CASE_INSENSITIVE
-    );
+    private final IntentParser intentParser;
 
     public EmergencyEventResponse processEvent(EmergencyEventRequest request) {
         long startTime = System.currentTimeMillis();
-        boolean triggered = Boolean.TRUE.equals(request.getIsExplicitSos()) ||
-                (request.getPayload() != null &&
-                        EMERGENCY_CASE_MATTER.matcher(request.getPayload()).find());
-
+        boolean triggered = Boolean.TRUE.equals(request.getIsExplicitSos())
+                || (request.getPayload() != null
+                && "EMERGENCY".equals(intentParser.classify(request.getPayload()).getIntent()));
         String reason = triggered ? "Emergency Detected" : "No Trigger";
 
-        User user = userRepository.findById(request.getUserId().intValue())
+        User user = userRepository.findById(request.getPatientId().intValue())
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
         EmergencyEvent event = null;
@@ -42,7 +36,7 @@ public class EmergencyEventService {
         if (triggered) {
             event = EmergencyEvent.builder()
                     .user(user)
-                    .eventType(request.getTriggerType() != null ? request.getTriggerType() : "SOS")
+                    .eventType(Boolean.TRUE.equals(request.getIsExplicitSos()) ? "SOS" : "KEYWORD")
                     .escalationStatus("ESCALATED")
                     .additionalInfo(request.getPayload())
                     .build();

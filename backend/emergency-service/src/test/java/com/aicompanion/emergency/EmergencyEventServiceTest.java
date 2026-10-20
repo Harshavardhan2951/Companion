@@ -41,7 +41,7 @@ public class EmergencyEventServiceTest {
     @Test
     public void testEmergencyKeywordDetection() {
         EmergencyEventRequest request = EmergencyEventRequest.builder()
-                .userId(testUser.getId().longValue())
+                .patientId(testUser.getId().longValue())
                 .payload("help me")
                 .isExplicitSos(false)
                 .build();
@@ -54,7 +54,7 @@ public class EmergencyEventServiceTest {
     @Test
     public void testExplicitSOS() {
         EmergencyEventRequest request = EmergencyEventRequest.builder()
-                .userId(testUser.getId().longValue())
+                .patientId(testUser.getId().longValue())
                 .payload(null)
                 .isExplicitSos(true)
                 .build();
@@ -67,7 +67,7 @@ public class EmergencyEventServiceTest {
     @Test
     public void testNoEmergency() {
         EmergencyEventRequest request = EmergencyEventRequest.builder()
-                .userId(testUser.getId().longValue())
+                .patientId(testUser.getId().longValue())
                 .payload("what time is it")
                 .isExplicitSos(false)
                 .build();
@@ -80,7 +80,7 @@ public class EmergencyEventServiceTest {
     @Test
     public void testProcessingTimeUnder200ms() {
         EmergencyEventRequest request = EmergencyEventRequest.builder()
-                .userId(testUser.getId().longValue())
+                .patientId(testUser.getId().longValue())
                 .payload("I fell")
                 .isExplicitSos(false)
                 .build();
